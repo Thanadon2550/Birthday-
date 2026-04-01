@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+  text-align: center;
+}
+
+.card {
+  background: rgba(255,255,255,0.15);
+  padding: 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  max-width: 400px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  background: #ff4d6d;
+  color: white;
+  font-size: 16px;
+}
+
+#countdown { font-size: 30px; }
+#message { margin-top: 10px; }
+
+/* หัวใจ */
+.heart {
+  position: absolute;
+  color: red;
+  animation: floatUp 5s linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh); opacity: 1; }
+  100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* รูปลอย */
+.floating-img {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 20px;
+  animation: floatImg 6s linear infinite;
+  opacity: 0.9;
+}
+
+@keyframes floatImg {
+  0% {
+    transform: translateY(100vh) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh) scale(1.2);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>🎂 Happy Birthday 🎂</h2>
+
+  <button onclick="start()">กดตรงนี้ 💌</button>
+
+  <div id="countdown"></div>
+  <div id="message"></div>
+</div>
+
+<audio id="bgmusic" loop>
+  <source src="https://files.catbox.moe/894ji9.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const text = `สุขสันต์วันเกิดนะเเฟน ปีนี้ก็อายุ16ปีเเล้วเค้าขออวยพรให้แฟนสุขภาพเเข็งเเรงไม่เจ็บป่วย ทำตัวน่ารักไม่ดื้อเเบบนี้ในทุกๆวันเค้าสัญญาว่าเค้าจะอยู่ตรงนี้ไม่หายไปไหนทั้งตอนทุกข์เเละสุข เเละสุดท้ายที่อยากบอกเค้ารักเธอมากๆอยู่รักกันแบบนี้ในทุกๆวันนะคะ เค้ารักเธอทู๊กกวันนนนน❤️`;
+
+// ✅ แก้ตรงนี้สำคัญ (ใส่ img/)
+const images = [
+  "img/img1.jpg",
+  "img/img2.jpg",
+  "img/img3.jpg",
+  "img/img4.jpg",
+  "img/img5.jpg"
+  "img/img6.jpg"
+  "img/img7.jpg"
+];
+
+function start() {
+  document.querySelector("button").style.display = "none";
+
+  let c = 3;
+  let cd = document.getElementById("countdown");
+  cd.innerHTML = c; // ✅ เพิ่มให้โชว์เลข 3 ทันที
+
+  let timer = setInterval(() => {
+    c--;
+    if (c > 0) {
+      cd.innerHTML = c;
+    } else {
+      clearInterval(timer);
+      cd.innerHTML = "❤️";
+
+      // เล่นเพลง
+      let music = document.getElementById("bgmusic");
+      music.volume = 0;
+      music.play().catch(()=>{}); // ✅ กัน error มือถือ
+
+      let vol = 0;
+      let fade = setInterval(() => {
+        if (vol < 1) {
+          vol += 0.05;
+          music.volume = vol;
+        } else {
+          clearInterval(fade);
+        }
+      }, 200);
+
+      // เอฟเฟกต์
+      setInterval(createHeart, 200);
+      setInterval(createFloatingImage, 500);
+
+      typeText();
+    }
+  }, 1000);
+}
+
+function typeText() {
+  let i = 0;
+  let msg = document.getElementById("message");
+
+  function typing() {
+    if (i < text.length) {
+      msg.innerHTML += text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
+      i++;
+      setTimeout(typing, 80);
+    }
+  }
+  typing();
+}
+
+// หัวใจลอย
+function createHeart() {
+  let heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "❤️";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 5000);
+}
+
+// รูปลอย
+function createFloatingImage() {
+  let img = document.createElement("img");
+  img.src = images[Math.floor(Math.random() * images.length)];
+  img.className = "floating-img";
+
+  img.style.left = Math.random() * 100 + "vw";
+  img.style.animationDuration = (Math.random() * 3 + 4) + "s";
+
+  document.body.appendChild(img);
+  setTimeout(() => img.remove(), 6000);
+}
+</script>
+
+</body>
+</html>
